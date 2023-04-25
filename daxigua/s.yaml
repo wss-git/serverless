@@ -1,0 +1,36 @@
+edition: 1.0.0
+name: component-test
+access: dankun
+
+services:
+  website:
+    component: fc
+    actions:
+      pre-deploy:
+        - plugin: website-fc
+    props:
+      region: cn-hangzhou
+      service:
+        name: test-game
+        description: "hello world by serverless devs"
+      function:
+        name: test
+        description: "hello world by serverless devs"
+        runtime: nodejs14
+        codeUri: ./
+        memorySize: 128
+        timeout: 20
+        instanceConcurrency: 128
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            authType: anonymous
+            methods:
+              - GET
+              - POST
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: /*
