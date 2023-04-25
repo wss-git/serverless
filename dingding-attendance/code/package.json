@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@serverless-cd/ding-talk": "^0.0.5",
+    "dayjs": "^1.11.7"
+  }
+}

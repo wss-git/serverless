@@ -1,0 +1,59 @@
+edition: 1.0.0
+name: compoent-test
+access: wss-root
+services:
+  cn-shenzhen-dingding-attendance-timer:
+    component: devsapp/fc
+    props:
+      region: cn-hangzhou
+      service:
+        description: 定时提醒打卡
+        internetAccess: true
+        name: dingding-attendance
+      function:
+        handler: index.handler
+        timeout: 60
+        diskSize: 512
+        instanceType: e1
+        runtime: nodejs16
+        cpu: 0.05
+        instanceConcurrency: 1
+        memorySize: 128
+        name: timer
+        codeUri: ./code
+        environmentVariables:
+          webhook: ${env.webhook}
+          secret: ${env.secret}
+      triggers:
+        - name: evening
+          description: ''
+          type: timer
+          qualifier: LATEST
+          config:
+            payload: 已经下班了，打卡了哈
+            cronExpression: CRON_TZ=Asia/Shanghai 0 30 18 * * MON,TUE,WED,THU,FRI,SAT,SUN
+            enable: true
+        - name: morning
+          description: ''
+          type: timer
+          qualifier: LATEST
+          config:
+            payload: 即将开始搬砖，打卡了吗？昨天打卡了吗？提的审批通过了吗？
+            cronExpression: CRON_TZ=Asia/Shanghai 30 27 9 * * MON,WED,TUE,THU,FRI,SUN,SAT
+            enable: true
+        - name: pre-evening
+          description: ''
+          type: timer
+          qualifier: LATEST
+          config:
+            payload: 即将下班了，注意要打卡了
+            cronExpression: CRON_TZ=Asia/Shanghai 0 28 18 * * MON,TUE,WED,THU,FRI,SUN,SAT
+            enable: true
+        - name: trigger-hb640075
+          description: ''
+          type: timer
+          qualifier: LATEST
+          config:
+            payload: 敌军已经到达战场，打卡了吗？昨天打卡了吗？提的审批通过了吗？
+            cronExpression: CRON_TZ=Asia/Shanghai 0 28 9 * * MON,TUE,THU,WED,FRI,SAT,SUN
+            enable: true
