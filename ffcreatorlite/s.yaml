@@ -1,0 +1,29 @@
+edition: 1.0.0
+name: serverless-cd
+access: wss-root
+
+vars:
+  region: 'cn-hangzhou'
+
+services:
+  admin:
+    component: fc
+    props:
+      region: ${vars.region}
+      service:
+        name: 'ffcreatorlite'
+        description: Serverless-cd 应用
+        logConfig: auto
+      function:
+        name: test
+        description: serverless-cd 前端应用接口
+        runtime: nodejs16
+        codeUri: ./code
+        handler: index.handler
+        memorySize: 640
+        timeout: 360
+        layers:
+          - acs:fc:${vars.region}:official:layers/FFmpeg6x/versions/1
+        environmentVariables:
+          PATH: /opt:/opt/bin/ffmpeg:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/fc/lang/nodejs16_alinode/bin:/opt/bin
+
